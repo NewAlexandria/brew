@@ -38,7 +38,9 @@ jobs:
           persist-credentials: false
 
       - name: Install vale
-        run: brew install vale
+        uses: Homebrew/actions/cache-homebrew-prefix@main
+        with:
+          install: vale
 
       - name: Cleanup Homebrew/brew docs
         if: github.repository == 'Homebrew/brew'

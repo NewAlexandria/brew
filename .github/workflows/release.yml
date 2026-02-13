@@ -51,8 +51,12 @@ jobs:
           core: false
           cask: false
 
+      - run: brew uninstall $(brew list)
+
       - name: Install Pandoc
-        run: brew install pandoc
+        uses: Homebrew/actions/cache-homebrew-prefix@main
+        with:
+          install: pandoc
 
       - name: Create and unlock temporary macOS keychain
         run: |

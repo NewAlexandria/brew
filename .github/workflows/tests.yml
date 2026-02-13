@@ -49,7 +49,9 @@ jobs:
         run: brew install-bundler-gems --groups=style,typecheck
 
       - name: Install shellcheck and shfmt
-        run: brew install shellcheck shfmt
+        uses: Homebrew/actions/cache-homebrew-prefix@main
+        with:
+          install: shellcheck shfmt
 
       - name: Cache style cache
         uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
@@ -263,7 +265,9 @@ jobs:
 
       - name: Install brew tests --online dependencies
         if: matrix.name == 'tests (online)'
-        run: brew install subversion curl
+        uses: Homebrew/actions/cache-homebrew-prefix@main
+        with:
+          install: subversion curl
 
       - name: Install brew tests macOS dependencies
         if: runner.os != 'Linux'
@@ -385,9 +389,13 @@ jobs:
         env:
           MATRIX_NAME: ${{ matrix.name }}
 
+      - run: brew uninstall $(brew list --formulae --casks)
+
       - run: brew test-bot --only-setup
 
-      - run: brew install gnu-tar
+      - uses: Homebrew/actions/cache-homebrew-prefix@main
+        with:
+          install: gnu-tar
 
       - run: brew test-bot --only-formulae --only-json-tab --test-default-formula
 
